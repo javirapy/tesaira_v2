@@ -3,17 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/pages/botones_censo_page.dart';
 import 'package:formvalidation/src/pages/botones_page.dart';
+import 'package:formvalidation/src/pages/buscar_agregar_persona_2_page.dart';
+import 'package:formvalidation/src/pages/buscar_agregar_persona_page.dart';
 import 'package:formvalidation/src/pages/buscar_persona_page.dart';
 import 'package:formvalidation/src/pages/dash_noti_page.dart';
 import 'package:formvalidation/src/pages/detalle_salida_page.dart';
+import 'package:formvalidation/src/pages/home_page.dart';
+import 'package:formvalidation/src/pages/home_tab_page.dart';
 import 'package:formvalidation/src/pages/login_page.dart';
 import 'package:formvalidation/src/pages/notifcacion_page.dart';
+import 'package:formvalidation/src/pages/paciente_buscar_agregar_2_page.dart';
 import 'package:formvalidation/src/pages/paciente_page.dart';
+import 'package:formvalidation/src/pages/paciente_buscar_agregar_page.dart';
 import 'package:formvalidation/src/pages/paciente_page_censo.dart';
 import 'package:formvalidation/src/pages/paciente_princ_page.dart';
 import 'package:formvalidation/src/pages/procedimiento_page.dart';
 import 'package:formvalidation/src/pages/productividad_page.dart';
 import 'package:formvalidation/src/pages/search_page.dart';
+import 'package:formvalidation/src/pages/search_persona_page.dart';
+import 'package:formvalidation/src/pages/sincronizados_visita_page.dart';
+import 'package:formvalidation/src/pages/sincronizar_visita_page.dart';
 import 'package:formvalidation/src/pages/vivienda_page.dart';
 import 'package:formvalidation/src/pages/vivienda_persona_page.dart';
 import 'package:formvalidation/src/preferencias_usuario/preferencias_usuario.dart';
@@ -33,6 +42,8 @@ void main() async {
 
 }
  
+
+ 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -40,13 +51,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Tesaira',
-        //home: MyHomePage(title: 'La pendeja',),
+        //home: MyHomePage(title: '',),
         initialRoute: 'login',
         routes: {     
-          'login'         : ( BuildContext context ) => LoginPage(),
+          'login'         : ( BuildContext context ) => LoginPage(),//
           'botones'       : ( BuildContext context ) => BotonesPage(),
-          'botonescenso'  : ( BuildContext context ) => BotonesCensoPage(),
-          'nuevaVisita'   : ( BuildContext context ) => NuevaVisitaPage(),
+          'botonescenso'  : ( BuildContext context ) => BotonesCensoPage(),//
+          'nuevaVisita'   : ( BuildContext context ) => NuevaVisitaPage(),//
           'buscarPesona'   : ( BuildContext context ) => BuscarPersonaPage(),
           'vivienda'      : ( BuildContext context ) => ViviendaPage(),
           'viviendapersona'      : ( BuildContext context ) => ViviendaPersonaPage(),
@@ -55,12 +66,24 @@ class MyApp extends StatelessWidget {
           'censo'         : ( BuildContext context ) => MyPages(),
           'paciente'      : ( BuildContext context ) => PacientePage(),
           'pacientecenso'      : ( BuildContext context ) => PacienteCensoPage(),
-          'notificaciones': ( BuildContext context ) => NotificacionPage(),
+          'notificaciones': ( BuildContext context ) => NotificacionPage(),//
           'dashnoti'      : (BuildContext context) => DashNotiPage(),
           'detNotificacion'  : (BuildContext context) => DetalleEntradaPage(),
           'detSuceso'     :(BuildContext context) => DetalleSalidaPage(),
-          'pacientePrinc'  : (BuildContext context) => PacientePrincPage(),
-          'productividad' :  (BuildContext context) => ProductividadPage()
+          'pacientePrinc'  : (BuildContext context) => PacientePrincPage(),//
+          'productividad' :  (BuildContext context) => ProductividadPage(),
+          'buscarAgregarPersona'   : ( BuildContext context ) => BuscarAgregarPersonaPage(),//
+          'pacienteBuscarAgregar'   : ( BuildContext context ) => PacienteBuscarAgregarPage(),
+
+          'buscarAgregarPersona2'   : ( BuildContext context ) => BuscarAgregarPersona2Page(),
+          'pacienteBuscarAgregar2'   : ( BuildContext context ) => PacienteBuscarAgregar2Page(),
+          'home'   : ( BuildContext context ) => HomePage(),
+          'homeTap'   : ( BuildContext context ) => HomeTapPage(),
+          'sincronizar':( BuildContext context ) => SincronizarVisitaPage(), //
+          'buscarPersona':( BuildContext context ) => SearchPersonaPage(), //
+          'sincronizados':( BuildContext context ) => SincronizadosVisitaPage(), //
+
+         // ListaSincronizarPage
         },
         theme: ThemeData(
           primaryColor: Colors.green,

@@ -12,6 +12,8 @@ class VisitaBloc with Validators {
 
   final _cedulaController    = BehaviorSubject<String>();
   final _listProcedimientoController    = BehaviorSubject<List<Map<String, dynamic>>>();
+    final _listPersonasController    = BehaviorSubject<List<Map<String, dynamic>>>();
+
   final _procedimientoController    = BehaviorSubject<Map<String, dynamic>>();
   final _detalleVisitaController    = BehaviorSubject<DetallesVisitas>();
   final _insertCensoController     = BehaviorSubject<DatosCensoInsert>();
@@ -36,9 +38,18 @@ class VisitaBloc with Validators {
     }
   }
 
+  void buscarPersona( String textoPersona ) async {
+    if(textoPersona != null){
+      List<Map<String, dynamic>> personas = await _visitaProvider.buscarPersonas(textoPersona);
+    _listPersonasController.sink.add( personas );
+
+    }
+  }
+
   // Recuperar los datos del Stream
   Stream<String> get cedulaStream    => _cedulaController.stream.transform( validarCedula );
   Stream<List<Map<String, dynamic>>> get listProcedimientoStream => _listProcedimientoController.stream;
+   Stream<List<Map<String, dynamic>>> get listPersonasStream => _listPersonasController.stream;
   Stream<Map<String, dynamic>> get procedimientoStream => _procedimientoController.stream;
   Stream<DetallesVisitas> get detalleVisitaStream => _detalleVisitaController.stream;
   Stream<DatosCensoInsert> get insertCensoStream => _insertCensoController.stream;
@@ -56,6 +67,7 @@ class VisitaBloc with Validators {
   dispose() {
     _cedulaController?.close();
     _listProcedimientoController?.close();
+    _listPersonasController?.close();
     _procedimientoController?.close();
     _detalleVisitaController?.close();
     _insertCensoController?.close();
@@ -102,4 +114,41 @@ class VisitaBloc with Validators {
     //_listProcedimientoController.sink.add( procedimientos );
     
   }*/
+
+
+
+  ///PARA SINCRONIZAR
+  
+   agregarActividadVisitas( Actividades actividad, idPaciente, idVivienda ) async{
+    await DBProvider.db.insertActividadesVisitas(actividad, idPaciente, idVivienda);
+   // await obtenerProcedimientos(idPaciente);
+  }
+
+  obtenerActividadVisitas( idPaciente ) async{
+   return await DBProvider.db.getActividadesVisitas(idPaciente);
+   // await obtenerProcedimientos(idPaciente);
+  }
+
+     insertVisitasLocal( InsertVisita visita ) async{
+    await DBProvider.db.insertVisitasLocal(visita);
+   // await obtenerProcedimientos(idPaciente);
+  }
+
+
+       getDatosVisitasLocal( id ) async{
+    return await DBProvider.db.getDatosVisitasLocal(id);
+   // await obtenerProcedimientos(idPaciente);
+  }
+
+    getListDatosVisitasLocal( sincornizado ) async{
+    return await DBProvider.db.getListDatosVisitasLocal(sincornizado);
+   // await obtenerProcedimientos(idPaciente);
+  }
+  
+   updateSincronizado( id ) async{
+    return await DBProvider.db.updateSincronizado(id);
+   // await obtenerProcedimientos(idPaciente);
+  }
+  
+  
 } 

@@ -3,21 +3,20 @@ import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/models/insert_visita_model.dart';
 import 'package:formvalidation/src/search/search_delegate.dart';
+import 'package:formvalidation/src/search/search_persona_delegate.dart';
 import 'package:formvalidation/src/utils/utils.dart';
 import 'package:showcaseview/showcaseview.dart';
 
+///NO SE USA
 
+class SearchPersonaPage extends StatefulWidget {
+  SearchPersonaPage({Key key}) : super(key: key);
 
-class SearchPage extends StatefulWidget {
-  SearchPage({Key key}) : super(key: key);
-
-  _SearchPageState createState() => _SearchPageState();
+  _SearchPersonaPageState createState() => _SearchPersonaPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPersonaPageState extends State<SearchPersonaPage> {
   
-  
-
   int _actividadSeleccionada;
   String _valoracionSeleccionada;
   //List<Actividades> procedimientoPersona;
@@ -26,22 +25,6 @@ class _SearchPageState extends State<SearchPage> {
   int pacienteId;
   GlobalKey _one = GlobalKey();
   BuildContext myContext;
-   PersonaModel personaMostrar;
-   DatosViviendaModel datosviviendaMostrar;
-
-     VisitaBloc bloc1;
-
-
-
-//    Future<PersonaModel> fetchEmployeesFromDatabase(VisitaBloc bloc) async {
-
-//   datosviviendaMostrar = await bloc.obtenerDatosVivienda();
-//   for (var x = 0; x < datosviviendaMostrar.personas.length; x++) {
-//     if (datosviviendaMostrar.personas[x].paciente_id == pacienteId){
-//        personaMostrar = datosviviendaMostrar.personas[x];
-//     }
-//   }
-// }
 
   /*@override
   void initState() { 
@@ -60,8 +43,7 @@ class _SearchPageState extends State<SearchPage> {
     final bloc = LocalProvider.visitaBloc(context);
     final size = MediaQuery.of(context).size;
     myContext = context;
-    personaMostrar =ModalRoute.of(context).settings.arguments;
-    pacienteId = personaMostrar.paciente_id;
+    pacienteId = ModalRoute.of(context).settings.arguments;
     
     return ShowCaseWidget(
       builder: Builder(
@@ -79,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget _crearAppBar(){
     return AppBar(
           
-          title: Text('Buscar procedimientos...'),
+          title: Text('Buscar Personas...'),
           centerTitle: false,
           backgroundColor: Colors.green,
           actions: <Widget>[
@@ -88,7 +70,7 @@ class _SearchPageState extends State<SearchPage> {
               onPressed: (){
                 showSearch(
                   context: context,
-                  delegate: DataSearch(),
+                  delegate: DataPersonaSearch(),
                   //query: 'Hola'
                   );
               },
@@ -126,18 +108,12 @@ class _SearchPageState extends State<SearchPage> {
                   height: 5.0,
                 )
             ),
-            Text(personaMostrar.nombre + ' ' + personaMostrar.apellido, style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-                Text('('+personaMostrar.documento + ')', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-                Text('___________________________________', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 14,),
-          //   datoPersonaStream(bloc1),
-            dibujarStream(bloc, size),
-           
+            dibujarStream(bloc, size)
           ]
         )
     );
     }else{
-      return  _crearBody(bloc);
+      return _crearBody(bloc);
     }
   }
 
@@ -153,15 +129,7 @@ class _SearchPageState extends State<SearchPage> {
     return false;
   }
 
-  Widget _crearBody(VisitaBloc bloc) {
-
-// datosviviendaMostrar =  bloc.obtenerDatosVivienda();
-//   for (var x = 0; x < datosviviendaMostrar.personas.length; x++) {
-//     if (datosviviendaMostrar.personas[x].paciente_id == pacienteId){
-//        personaMostrar = datosviviendaMostrar.personas[x];
-//     }
-//   }
-
+  Widget _crearBody(VisitaBloc bloc){
     return Stack(
       children : <Widget>[
         Align(
@@ -170,12 +138,7 @@ class _SearchPageState extends State<SearchPage> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                Text(personaMostrar.nombre + ' ' + personaMostrar.apellido, style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-                Text('('+personaMostrar.documento + ')', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-                Text('___________________________________', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 14,),
-               // datoPersonaStream(bloc),
-                Text('Acceso rápido a procedimientos', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                Text('Acceso rápido a procedimientos', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
                 SizedBox(height: 14,),
                 Chip(
                   backgroundColor: Colors.green,
@@ -268,36 +231,6 @@ class _SearchPageState extends State<SearchPage> {
                     ); 
   }
 
-  // Future<Widget> datoPersonaStream(bloc1) async{
-  //   return FutureBuilder(
-  //                     future: bloc1.obtenerDatosVivienda(),
-                      
-  //                     builder: (BuildContext context, AsyncSnapshot<DatosViviendaModel> snapshot){
-  //                       print(snapshot.data.personas.toString());
-  //                       if(snapshot.hasData){
-  //                     //    return dibujarView(bloc, size, snapshot.data);
-
-  //                          for (var x = 0; x < snapshot.data.personas.length; x++) {
-  //                         if (snapshot.data.personas[x].paciente_id == pacienteId){
-  //                           personaMostrar = datosviviendaMostrar.personas[x];
-  //                         }
-  //                       }
-
-  //                       Column(
-  //         children: <Widget>[
-
-          // Text(personaMostrar.nombre + ' ' + personaMostrar.apellido, style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-          //       Text('('+personaMostrar.documento + ')', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-          //       Text('___________________________________', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-          //       SizedBox(height: 14,),
-  //         ]
-  //                       );
-  //                       }
-  //                       return Container();
-  //                     },
-  //                   ); 
-  // }
-
   Widget dibujarView(bloc, size, Map<String, dynamic> data){
     return _dibujarCaja(bloc, size, data);    
   }
@@ -345,10 +278,6 @@ class _SearchPageState extends State<SearchPage> {
 
   List<Widget> dibujarParCifras(Map<String, dynamic> data, VisitaBloc bloc){
     return <Widget>[
-        // Text(personaMostrar.nombre + ' ' + personaMostrar.apellido, style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         Text('('+personaMostrar.documento + ')', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         Text('___________________________________', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         SizedBox(height: 14,),
       Text('Carga de Actividades ${ data['nombre'] }', style: TextStyle(fontSize: 25.0, color: Colors.green, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
       SizedBox( height: 30.0 ),
       _crearDropDownActividad(),
@@ -416,9 +345,7 @@ class _SearchPageState extends State<SearchPage> {
           actividad.nombreProcedimiento = data['nombre'];
           print('Se creo todo ');
           bloc.agregarProcedimiento(actividad, pacienteId);
-          // Navigator.pushReplacementNamed(context, 'procedimiento');
-                    Navigator.pushReplacementNamed(context, 'procedimiento', arguments: personaMostrar);
-
+          Navigator.pushReplacementNamed(context, 'procedimiento');
         },
       )
     ];
@@ -426,10 +353,6 @@ class _SearchPageState extends State<SearchPage> {
 
   List<Widget> dibujarNumero(Map<String, dynamic> data, VisitaBloc bloc){
     return <Widget>[
-        // Text(personaMostrar.nombre + ' ' + personaMostrar.apellido, style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         Text('('+personaMostrar.documento + ')', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         Text('___________________________________', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         SizedBox(height: 14,),
       Text('Carga de Actividades ${ data['nombre'] }', style: TextStyle(fontSize: 25.0, color: Colors.green, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
       SizedBox( height: 30.0 ),
       _crearDropDownActividad(),
@@ -497,9 +420,7 @@ class _SearchPageState extends State<SearchPage> {
           actividad.nombreProcedimiento = data['nombre'];
           print('Se creo todo ');
           bloc.agregarProcedimiento(actividad, pacienteId);
-          // Navigator.pushReplacementNamed(context, 'procedimiento');
-                    Navigator.pushReplacementNamed(context, 'procedimiento', arguments: personaMostrar);
-
+          Navigator.pushReplacementNamed(context, 'procedimiento');
         },
       )
     ];
@@ -572,10 +493,6 @@ class _SearchPageState extends State<SearchPage> {
 
   List<Widget> dibujarRealizado(Map<String, dynamic> data, VisitaBloc bloc){
     return <Widget>[
-        // Text(personaMostrar.nombre + ' ' + personaMostrar.apellido, style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         Text('('+personaMostrar.documento + ')', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         Text('___________________________________', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-        //         SizedBox(height: 14,),
       Text('Carga de Actividades ${ data['nombre'] }', style: TextStyle(fontSize: 25.0, color: Colors.green, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
       SizedBox( height: 30.0 ),
       _crearDropDownActividad(),
@@ -618,7 +535,7 @@ class _SearchPageState extends State<SearchPage> {
           print('Se creo todo ${ data['nombre'] }');
           bloc.agregarProcedimiento(actividad, pacienteId);
           //Navigator.pushNamed(context, 'procedimiento');
-          Navigator.pushReplacementNamed(context, 'procedimiento', arguments: personaMostrar);
+          Navigator.pushReplacementNamed(context, 'procedimiento');
         },
         //onPressed: () => _buscar(bloc, context)
       )
@@ -627,10 +544,6 @@ class _SearchPageState extends State<SearchPage> {
 
   List<Widget> dibujarValoracion(Map<String, dynamic> data, VisitaBloc bloc){
     return <Widget>[
-    //     Text(personaMostrar.nombre + ' ' + personaMostrar.apellido, style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-    //             Text('('+personaMostrar.documento + ')', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-    //             Text('___________________________________', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-    //             SizedBox(height: 14,),
       Text('Carga de Actividades ${ data['nombre'] }', style: TextStyle(fontSize: 25.0, color: Colors.green, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
       SizedBox( height: 30.0 ),
       _crearDropDownActividad(),
@@ -685,10 +598,7 @@ class _SearchPageState extends State<SearchPage> {
           print('Se creo todo ${ data['nombre'] }');
           //bloc.changeDetalleVisita(actividad);
           bloc.agregarProcedimiento(actividad, pacienteId);
-          // Navigator.pushReplacementNamed(context, 'procedimiento');
-          Navigator.pushReplacementNamed(context, 'procedimiento', arguments: personaMostrar);
-          //TODO
-
+          Navigator.pushReplacementNamed(context, 'procedimiento');
         },
         //onPressed: () => _buscar(bloc, context)
       )

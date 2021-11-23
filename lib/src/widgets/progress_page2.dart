@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/datos_censo.dart';
+import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/providers/constantes.dart';
 import 'package:formvalidation/src/providers/visita_provider.dart';
 import 'package:formvalidation/src/utils/number.dart';
@@ -33,7 +34,9 @@ class _MyPagesState extends State<MyPages> {
   @override
   void initState() { 
     super.initState();
+    print("Antes de llamar al servicio getDatosCenso()");
     futureDatos = visitaProvider.getDatosCenso();
+    print("Antes de llamar al servicio getDatosCenso()");
   }
 
   @override
@@ -101,10 +104,10 @@ class _MyPagesState extends State<MyPages> {
     return FutureBuilder<DatosCensoModel>(
       future: futureDatos,
       builder: (BuildContext context, AsyncSnapshot<DatosCensoModel> snapshot) {
-        print('ENtra en el builder');
-        print('Entra al build ');
+        print('Proggres_page_2 - ENtra en el builder');
+        print('Proggres_page_2 - Entra al build ');
         if ( snapshot.hasData ) {
-          print('tiene data el snapshot');
+          print('Proggres_page_2 - tiene data el snapshot');
           final datos = snapshot.data;
           return  Container(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -119,6 +122,8 @@ class _MyPagesState extends State<MyPages> {
                         Page5(mapInsert: mapInsert, datos: datos, controller: controller, callback: disparo5),
                         Page6(mapInsert: mapInsert, datos: datos, controller: controller, callback: disparo6,),
                         Page7(mapInsert: mapInsert, datos: datos, controller: controller, callback: () => insertCenso(context))
+
+                       
                       ],
                     ),
                   );
@@ -144,7 +149,12 @@ class _MyPagesState extends State<MyPages> {
               );
   }
 
-  void actionInsert(context, String viviendaId ){
+  void actionInsert(context, String viviendaId ) {
+    //final bloc = LocalProvider.visitaBloc(context);
+    List<PersonaModel> personas = [];
+        
+        bloc.changePersonas(personas);
+  
     Navigator.pushReplacementNamed(context, 'pacientePrinc', arguments: viviendaId);
   }
 
@@ -208,6 +218,9 @@ class _MyPagesState extends State<MyPages> {
     await obtenerUbicacion();
     mapInsert['lat'] = latitud;
     mapInsert['lon'] = longitud;
+    mapInsert['telefono_vivienda'] = '+595' + mapInsert['telefono_vivienda'];
+
+    print(mapInsert['telefono_vivienda'].toString());
     print('Se ejecuta crear censo');
     final visitaProvider = new VisitaProvider();
     String mensaje = await visitaProvider.crearCenso(mapInsert);
@@ -244,7 +257,7 @@ class _Page1State extends State<Page1> {
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
-    print('Se dibuja el page1');
+    print('Page 2 proggres bar Se dibuja el page1');
     bloc = LocalProvider.visitaBloc(context);
     return Column(
       children: [
@@ -383,7 +396,8 @@ class _Page2State extends State<Page2> {
   TextEditingController casaController = new TextEditingController(text: '');
   TextEditingController direccionController= new TextEditingController(text: '') ;
   TextEditingController referenciaController= new TextEditingController(text: '') ;
-  
+    TextEditingController celularController= new TextEditingController(text: '') ;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -397,6 +411,7 @@ class _Page2State extends State<Page2> {
                   _crearInputCasa(etiqueta:'Nro. Casa', property:'numero_casa', atributo:widget.mapInsert),
                   _crearInputDireccion(etiqueta:'Dirección', property:'direccion', atributo:widget.mapInsert),
                   _crearInputReferencia(etiqueta:'Referencia', property:'referencia', atributo:widget.mapInsert),
+                  _crearInputCelular(etiqueta:'Nro. Celular', property:'telefono_vivienda', atributo:widget.mapInsert),
                 ],
               ),
             ),
@@ -417,7 +432,7 @@ class _Page2State extends State<Page2> {
                 color: Colors.green,
                 textColor: Colors.white,
                 onPressed: (){
-                  if( casaController.text == '' || referenciaController.text == '' || direccionController.text == '' ){
+                  if( casaController.text == '' || referenciaController.text == '' || direccionController.text == ''|| celularController.text == '' ){
                      AppAlertDialog.error(
                       context: context,
                       tittle: 'Tesãira',
@@ -469,10 +484,24 @@ class _Page2State extends State<Page2> {
         labelText: etiqueta
       ),
       onSaved: (value) => atributo[property] = value,
+      controller: celularController,
+    );
+
+  }
+
+    Widget _crearInputCelular({@required String etiqueta, @required String property, @required Map<String, dynamic> atributo}) {
+    return TextFormField(
+      //initialValue: 'El inicial',
+      //textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(
+        labelText: etiqueta
+      ),
+      onSaved: (value) => atributo[property] = value,
       controller: referenciaController,
     );
 
   }
+
 
   Widget _item({@required String etiqueta, @required String property, @required Map<String, dynamic> atributo, @required List<ItemModel> listaValor, @required valorTomar }) {
     String texto ="";
@@ -1285,6 +1314,7 @@ class _Page7State extends State<Page7> {
                 color: Colors.orange,
                 textColor: Colors.white,
                 onPressed: (){
+                  print(widget.mapInsert);
                   if(widget.mapInsert['seguro_publico'] == null || widget.mapInsert['seguro_privado'] == null || widget.mapInsert['farmacia'] == null || widget.mapInsert['medico_naturalista'] == null){
                      AppAlertDialog.error(
                       context: context,

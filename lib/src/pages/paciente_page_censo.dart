@@ -366,7 +366,7 @@ class _Page2State extends State<Page2> {
   
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context).unfocus();
+   // FocusScope.of(context).unfocus();
     return Column(
       children: [
           Form(
@@ -419,15 +419,30 @@ class _Page2State extends State<Page2> {
   }
 
   
-  Widget _crearInputDocumento({@required String etiqueta, @required String property, @required Map<String, dynamic> atributo}) {
+  // Widget _crearInputDocumento({@required String etiqueta, @required String property, @required Map<String, dynamic> atributo}) {
+  //   return TextFormField(
+  //     //initialValue: 'El inicial',
+  //     //textCapitalization: TextCapitalization.sentences,
+
+  //     decoration: InputDecoration(
+  //       labelText: etiqueta
+  //     ),
+  //     onSaved: (value) => atributo[property] = value,
+  //           controller: documentoController,
+
+  //   );
+
+  // }
+
+    Widget _crearInputDocumento({@required String etiqueta, @required String property, @required Map<String, dynamic> atributo}) {
     return TextFormField(
       //initialValue: 'El inicial',
       //textCapitalization: TextCapitalization.sentences,
-
       decoration: InputDecoration(
         labelText: etiqueta
       ),
       onSaved: (value) => atributo[property] = value,
+      controller: documentoController,
     );
 
   }

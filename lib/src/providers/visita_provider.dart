@@ -49,6 +49,37 @@ class VisitaProvider {
     
   }
 
+   Future<List<Map<String, dynamic>>> buscarPersonas( String textoPersona) async {
+    Map<String, String> headers = {"Authorization": "Bearer ${_prefs.token}", "Content-Type": "application/json"};
+    final resp = await http.get(
+      'https://www.tesairauc.com/api/buscadorPersonas/${textoPersona}',
+      headers: headers
+    );
+
+    List<Map<String, dynamic>> decodedData = [];
+    Map<String, dynamic> dataraw;
+     dataraw = json.decode(resp.body);
+ print(dataraw);
+    // final List<Map<String, dynamic>> decodedData = new List<Map<String, dynamic>>.from(lista[0].persona);
+    // print(decodedData);
+    // return decodedData;
+
+     try{
+      dataraw = json.decode(resp.body);
+      
+      if(dataraw != null && dataraw.containsKey('persona') ){
+        for(var item in dataraw['persona']){
+          decodedData.add(item);
+        }
+      }
+      
+    }catch(e){ 
+      print('Error al convertir datos persona $e');
+    }
+        return decodedData;   
+
+  }
+
   Future<String> crearVisita( InsertVisita visitaData ) async {
     //InsertData data = new InsertData();
     //data.data = visitaData;
@@ -83,9 +114,12 @@ class VisitaProvider {
     );
     print(resp);
     DatosCensoModel decodedResp ;
+
     try{
       final Map<String, dynamic> decodedData = json.decode(resp.body);
       decodedResp = DatosCensoModel.fromJson( decodedData );
+      print("Llama a getDatosCenso() -> que usa el servicio https://www.tesairauc.com/api/datoscenso.json, con resultado: ${decodedResp.microterritorios[1].descripcion}");
+
     }catch(e){ 
       print('Error al convertir datos censo $e');
     }
@@ -123,7 +157,7 @@ class VisitaProvider {
     Map<String, String> headers = {"Authorization": "Bearer ${_prefs.token}", "Content-Type": "application/json"};
     final bodydata = jsonEncode(mapInsert); 
     
-    print(bodydata);
+    print("Crear Paciente ${bodydata}" );
 
     final resp = await http.post(
       'https://www.tesairauc.com/api/crearPersona.json',
@@ -223,6 +257,33 @@ class VisitaProvider {
     return decodedData;   
   }
 
+    Future<int> getContadorNotificacion() async {
+    List<Map<String, dynamic>> decodedData = [];
+    Map<String, dynamic> dataraw;
+
+    Map<String, String> headers = {"Authorization": "Bearer ${_prefs.token}"};
+    
+    final resp = await http.get(
+      'https://www.tesairauc.com/api/contadornotificaciones',
+      headers: headers
+    );
+    print("notificaciones ${resp.body}");
+    // try{
+       dataraw = json.decode(resp.body);
+    //   print("notificaciones 2 ${dataraw["response"]}");
+      
+    //    if(dataraw != null && dataraw.containsKey('response') ){
+    //   //  return dataraw["response"];
+
+    //   // }
+      
+    // }catch(e){ 
+    //   print('Error al convertir contador notificaciones $e');
+    // }
+    
+    return dataraw["response"];   
+  }
+
   Future<Map<String, dynamic>> getDetalleSalida(dynamic id) async {
     List<Object> rawList;
     Map<String, dynamic> decodedData ;
@@ -290,5 +351,87 @@ class VisitaProvider {
     }
     
     return decodedData;   
+  }
+
+
+  Future<List<Map<String, dynamic>>>  getProductividad1() async {
+ 
+   List<Map<String, dynamic>> decodedData = [];
+    List<Object> dataraw;
+
+
+    Map<String, String> headers = {"Authorization": "Bearer ${_prefs.token}"};
+    
+    final resp = await http.get(
+      'https://www.tesairauc.com/api/getdatosproductividad',
+      headers: headers
+    );
+    
+  print(resp);
+    try{
+      dataraw = json.decode(resp.body);
+      
+      for (var item in dataraw) {
+        decodedData.add(item);
+      }
+      
+    }catch(e){ 
+      print('Error al convertir datos buz salida $e');
+    }
+
+     print(decodedData);
+    
+    return decodedData;   
+  }
+
+  Future<Persona2Model> buscarPaciente2( String cedula) async {
+    Map<String, String> headers = {"Authorization": "Bearer ${_prefs.token}", "Content-Type": "application/json"};
+    final resp = await http.get(
+      'https://www.tesairauc.com/api/personas/${cedula}',
+      headers: headers
+    );
+    
+    Map<String, dynamic> decodedData;
+    Persona2Model decodedResp;
+    try {
+      decodedData = json.decode(resp.body);
+    //  print(decodedData);
+    print("decodedData ${decodedData}" );
+      decodedResp = Persona2Model.fromJson( decodedData );
+    } catch (e) {
+      print('No existe hina el documento buscado2');
+      //print(e);
+    }
+    
+    if ( decodedResp != null ) {
+       return decodedResp;
+      print("No es null ${decodedResp}");
+    } else {
+      return null;
+    }
+
+  }
+
+
+  Future<Map<String, dynamic>> buscarPaciente12( String cedula) async {
+    Map<String, String> headers = {"Authorization": "Bearer ${_prefs.token}", "Content-Type": "application/json"};
+    final resp = await http.get(
+      'https://www.tesairauc.com/api/personas/${cedula}',
+      headers: headers
+    );
+
+    Map<String, dynamic> decodedResp = json.decode( resp.body );
+
+    print(decodedResp.length);
+
+    //return { 'ok': true, 'persona': decodedResp['persona'] };
+
+     if ( decodedResp.length>0 ) {
+
+      return { 'ok': true, 'persona': decodedResp['persona'] };
+    } else {
+      return { 'ok': false};
+    }
+
   }
 }

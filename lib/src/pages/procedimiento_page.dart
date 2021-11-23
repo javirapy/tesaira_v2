@@ -12,12 +12,17 @@ class ProcedimientoPage extends StatefulWidget {
 
 class _ProcedimientoPageState extends State<ProcedimientoPage> {
   
+     PersonaModel personaMostrar;
+   DatosViviendaModel datosviviendaMostrar;
   DatosViviendaModel dataToSend;
+
+   
 
   @override
   Widget build(BuildContext context) {
     final bloc = LocalProvider.visitaBloc(context);
-
+   personaMostrar =ModalRoute.of(context).settings.arguments;
+ 
     return Scaffold(
       appBar: _crearAppBar(bloc, context),
       body: SingleChildScrollView(
@@ -40,7 +45,7 @@ class _ProcedimientoPageState extends State<ProcedimientoPage> {
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () {
                 bloc.changeProcedimiento(null);
-                Navigator.pushNamed(context, 'busqueda', arguments: bloc.detalleVisita.pacienteId);
+                Navigator.pushNamed(context, 'busqueda', arguments: personaMostrar);
               }
             ),
             SpeedDialChild(

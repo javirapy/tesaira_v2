@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/models/insert_visita_model.dart';
@@ -20,6 +21,7 @@ class _ViviendaPersonaPageState extends State<ViviendaPersonaPage> {
   VisitaBloc bloc;
   double latitud;
   double longitud;
+  String viviendaId;
   final _prefs = new PreferenciasUsuario();
 
   
@@ -50,17 +52,18 @@ class _ViviendaPersonaPageState extends State<ViviendaPersonaPage> {
             )*/
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: buildBotonesFlotantes(context,datosVivienda) /*FloatingActionButton(
           child: Icon( Icons.add ,color: Colors.white, ),
           onPressed: () {
             Map<String, Object> argumentosVista = {};
             argumentosVista['viviendaId'] = datosVivienda.vivienda.id;
             //este envio tambien porque  voy a necesitar para poder llamar al rest que trae los datos  de la vivienda
             argumentosVista['documentoPaciente'] = _prefs.documentoBuscado;
-            Navigator.pushNamed(context, 'pacientecenso', arguments: argumentosVista);
+           // Navigator.pushNamed(context, 'pacientecenso', arguments: argumentosVista);
+           Navigator.pushNamed(context, 'buscarPersona21');
           }  ,
           backgroundColor: Colors.green,
-        ),
+        ),*/
       ),  
     );
   }
@@ -69,7 +72,7 @@ class _ViviendaPersonaPageState extends State<ViviendaPersonaPage> {
     bool notNull(Object o) => o != null;
     return AppBar(
         backgroundColor: Colors.green,
-        title: Text('Datos vivienda', style: TextStyle(color: Colors.white)),
+        title: Text('Datos Vivienda', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         actions: <Widget>[
           dataConfirm != null ?
@@ -262,10 +265,12 @@ class _ViviendaPersonaPageState extends State<ViviendaPersonaPage> {
     sendData.lon = longitud;
     sendData.viviendaId = datosVivienda.vivienda.id;
     sendData.detallesVisitas = await bloc.obtenerDetallesVisita();
+
+  
     final visitaProvider = new VisitaProvider();
     String mensaje = await visitaProvider.crearVisita(sendData);
     if(mensaje == 'ok'){
-      showMessageSuccess(context, 'Al presionar ok lo llevará a la pantalla de menú');
+      showMessageSuccess(context, 'Al presionar ok lo llevará a la pantalla de menú xxx');
     }else{
       mostrarAlerta(context, mensaje);
     }
@@ -310,3 +315,62 @@ class _ViviendaPersonaPageState extends State<ViviendaPersonaPage> {
     );
   }
 }
+
+
+  Widget buildBotonesFlotantes( BuildContext context, datosVivienda){
+
+    Map<String, Object> argumentosVista = {};
+            argumentosVista['viviendaId'] = datosVivienda.vivienda.id;
+            //este envio tambien porque  voy a necesitar para poder llamar al rest que trae los datos  de la vivienda
+            argumentosVista['documentoPaciente'] = datosVivienda.documentoBuscado;
+           // Navigator.pushNamed(context, 'pacientecenso', arguments: argumentosVista);
+    return SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        children: [
+            SpeedDialChild(
+              child: Icon(Icons.add, color: Colors.white,),
+              backgroundColor: Colors.red,
+              label: 'Agregar paciente',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, 'pacientecenso', arguments: argumentosVista);
+              }
+            ),SpeedDialChild(
+              child: Icon(Icons.done, color: Colors.white),
+              backgroundColor: Colors.blue,
+              label: 'Finalizar',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: ()  {
+                showMessageSuccess(context);
+              },
+            ),
+
+            SpeedDialChild(
+              child: Icon(Icons.search, color: Colors.white,),
+              backgroundColor: Colors.red,
+              label: 'Buscar y Agregar paciente',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, 'buscarAgregarPersona2', arguments:datosVivienda);
+              }
+            ),
+          ],
+      );
+
+      
+  }
+
+    void actionSalir(context ){
+    Navigator.pushReplacementNamed(context, 'botones');
+  }
+
+   void showMessageSuccess(BuildContext context ) {
+    AppAlertDialog.success(
+      context: context,
+      tittle: 'Tesãira', 
+      desc: 'Ha finalizado exitosamente, será redirigido al inicio', 
+      btnOkOnPress: () => actionSalir(context)
+    );
+  }

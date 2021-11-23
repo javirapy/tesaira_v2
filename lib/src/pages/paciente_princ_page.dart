@@ -45,7 +45,7 @@ class _PacientePrincPageState extends State<PacientePrincPage> {
           personas = snapshot.data;
         }
 
-
+print("Viene de progress_page2.dart, retornar vivienda id ${viviendaId}");
         if ( personas == null ) {
           return Center(
             heightFactor: 3,
@@ -112,6 +112,15 @@ class _PacientePrincPageState extends State<PacientePrincPage> {
               onTap: ()  {
                 showMessageSuccess(context);
               },
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.search, color: Colors.white,),
+              backgroundColor: Colors.red,
+              label: 'Buscar y Agregar paciente',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, 'buscarAgregarPersona', arguments: viviendaId);
+              }
             ),
           ],
       );

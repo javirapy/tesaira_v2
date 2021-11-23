@@ -18,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _wating = false;
   bool _claveVisible = true;
 
+   
+
   @override
   Widget build(BuildContext context) {
     final spinner = SpinKitWave(
@@ -45,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
     final bloc = LocalProvider.of(context);
     final size = MediaQuery.of(context).size;
+    
 
     return SingleChildScrollView(
       child: Column(
@@ -213,6 +216,7 @@ class _LoginPageState extends State<LoginPage> {
     if ( info['ok'] ) {
       //pushReplacementNamed hace que se borre la pila de actividades y esa sea la raiz(tal como android)
        Navigator.pushReplacementNamed(context, 'botones');
+       //Navigator.pushReplacementNamed(context, 'homeTap');
     } else {
       mostrarAlerta( context, info['message'] );
     }

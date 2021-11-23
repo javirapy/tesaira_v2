@@ -50,7 +50,7 @@ class DetalleEntradaPage extends StatelessWidget {
             Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text('Fechqa de creación: ', style: estiloTexto)
+                    child: Text('Fecha de creación: ', style: estiloTexto)
                   ),
                   
                 ],

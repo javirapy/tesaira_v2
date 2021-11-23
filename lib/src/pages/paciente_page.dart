@@ -934,7 +934,7 @@ class _Page6State extends State<Page6> {
                 child: Container(
                           margin: EdgeInsets.symmetric( horizontal: 80.0, vertical: 5.0),
                           //padding: EdgeInsets.symmetric( horizontal: 30.0, vertical: 50.0),
-                          child: Text('Finalizar paciente'),
+                          child: Text('Finalizar Paciente'),
                         ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0)

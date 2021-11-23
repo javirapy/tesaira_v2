@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/providers/visita_provider.dart';
+import 'package:formvalidation/src/search/search_persona_delegate.dart';
 import 'package:formvalidation/src/widgets/app_alertdialog.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -27,7 +28,7 @@ class _NuevaVisitaPageState extends State<NuevaVisitaPage> {
     );
 
     return Scaffold(
-      appBar: _crearAppBar(context),
+      appBar: _crearAppBar(),
       body: ModalProgressHUD(
         inAsyncCall: _wating,
         opacity: 0.5,
@@ -37,10 +38,33 @@ class _NuevaVisitaPageState extends State<NuevaVisitaPage> {
     );
   }
 
-  Widget _crearAppBar(context){
+  // Widget _crearAppBar(context){
+  //   return AppBar(
+  //       title: Text('Ingrese cedula', style: TextStyle(color: Colors.white),),
+  //       centerTitle: true,
+  //     );
+  // }
+
+    Widget _crearAppBar(){
     return AppBar(
-        title: Text('Ingrese cedula', style: TextStyle(color: Colors.white),),
-        centerTitle: true,
+          
+          title: Text('Buscar Personas...'),
+          centerTitle: false,
+          backgroundColor: Colors.green,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: (){
+                showSearch(
+                  context: context,
+                  delegate: DataPersonaSearch(),
+                  //query: 'Hola'
+                  );
+              },
+            )
+
+
+          ],
       );
   }
 
@@ -74,7 +98,7 @@ class _NuevaVisitaPageState extends State<NuevaVisitaPage> {
             ),
             child: Column(
               children: <Widget>[
-                Text('Buscar Paciente', style: TextStyle(fontSize: 20.0)),
+                Text('Buscar Paciente a Visitar', style: TextStyle(fontSize: 20.0)),
                 SizedBox( height: 60.0 ),
                 _crearCedula(bloc),
                 SizedBox( height: 30.0 ),

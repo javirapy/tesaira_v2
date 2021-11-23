@@ -179,6 +179,7 @@ class DatosCensoInsert{
    int lon;
    int area;
    int numero_casa;
+   int telefono_vivienda;
    int direccion;
    int referencia;
    int pertenencia_vivienda_id;
@@ -215,6 +216,7 @@ class DatosCensoInsert{
     this.lon,
     this.area,
     this.numero_casa,
+    this.telefono_vivienda,
     this.direccion,
     this.referencia,
     this.pertenencia_vivienda_id,

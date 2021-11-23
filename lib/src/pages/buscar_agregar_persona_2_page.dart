@@ -3,32 +3,48 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/providers/visita_provider.dart';
-import 'package:formvalidation/src/search/search_persona_agregar_delegate.dart';
 import 'package:formvalidation/src/widgets/app_alertdialog.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 
 //en esta pagina se carga la ci de la persona al cual se quiere visitar
-class BuscarPersonaPage extends StatefulWidget {
+class BuscarAgregarPersona2Page extends StatefulWidget {
   
   @override
-  _BuscarPersonaPageState createState() => _BuscarPersonaPageState();
+  _BuscarAgregarPersona2PageState createState() => _BuscarAgregarPersona2PageState();
 }
 
-class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
+class _BuscarAgregarPersona2PageState extends State<BuscarAgregarPersona2Page> {
   
   final visitaProvider = new VisitaProvider();
   bool _wating = false;
+  //String viviendaId;
+  DatosViviendaModel datosVivienda;
+
+  ScreenArguments parametros = new ScreenArguments();
   
   @override
   Widget build(BuildContext context) {
+   // viviendaId = ModalRoute.of(context).settings.arguments;
+    datosVivienda = ModalRoute.of(context).settings.arguments;
+
+print("Id de vivienda en buscar persona 2 ${datosVivienda.vivienda.id}");
+
+
+  
+     parametros.datosVivienda = datosVivienda;
+
+    print("Id de vivienda en buscar persona 2 ${datosVivienda.vivienda.id}");
+
+
+     print("Datos viviendar persona 2 ${parametros.datosVivienda.toString()}");
     final spinner = SpinKitWave(
         color: Colors.green,
         size: 50.0,
     );
 
     return Scaffold(
-      appBar: _crearAppBar(),
+      appBar: _crearAppBar(context),
       body: ModalProgressHUD(
         inAsyncCall: _wating,
         opacity: 0.5,
@@ -38,35 +54,18 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
     );
   }
 
-///SE QUITA PARA AGREGAR BUSQUEDA DINAMICA
-  // Widget _crearAppBar(context){
-  //   return AppBar(
-  //       title: Text('Ingrese cedula', style: TextStyle(color: Colors.white),),
-  //       centerTitle: true,
-  //     );
-  // }
-
-  
-    Widget _crearAppBar(){
+  Widget _crearAppBar(context){
     return AppBar(
-          
-          title: Text('Buscar Personas...'),
-          centerTitle: false,
-          backgroundColor: Colors.green,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: (){
-                showSearch(
-                  context: context,
-                  delegate: DataPersonaAgregarSearch(),
-                  //query: 'Hola'
-                  );
-              },
-            )
+        title: Text('Ingrese cedula a buscar xx1', style: TextStyle(color: Colors.white),),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+         FocusScope.of(context).unfocus();
 
-
-          ],
+            Navigator.pushReplacementNamed(context, 'viviendapersona', arguments: datosVivienda);
+          } 
+        ),
       );
   }
 
@@ -100,10 +99,10 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
             ),
             child: Column(
               children: <Widget>[
-                Text('Buscar Paciente Vivienda', style: TextStyle(fontSize: 20.0)),
-                SizedBox( height: 60.0 ),
+                Text('Buscar Paciente a Agregar', style: TextStyle(fontSize: 20.0)),
+                SizedBox( height: 50.0 ),
                 _crearCedula(bloc),
-                SizedBox( height: 30.0 ),
+                SizedBox( height: 20.0 ),
                 _crearBoton( bloc )
               ],
             ),
@@ -122,7 +121,7 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: TextField(
               decoration: InputDecoration(
-                labelText: 'Cedula',
+                labelText: 'Ingrese Nro.Cedula a Buscar',
                 errorText: snapshot.error
               ),
               onChanged: bloc.changeCedula,
@@ -137,7 +136,7 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
   Widget _crearBoton( VisitaBloc bloc) {       
       return RaisedButton(
         child: Container(
-          padding: EdgeInsets.symmetric( horizontal: 80.0, vertical: 15.0),
+          padding: EdgeInsets.symmetric( horizontal: 20.0, vertical: 15.0),
           child: Text('Buscar'),
         ),
         shape: RoundedRectangleBorder(
@@ -157,15 +156,17 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
       _wating = true;
     });
     await bloc.eliminarTodo();
-    DatosViviendaModel info = await visitaProvider.buscarPaciente(bloc.cedula);
+    Persona2Model info = await visitaProvider.buscarPaciente2(bloc.cedula);
     setState(() {
       _wating = false;
     });
-
-    if ( info != null ) {
+print("Info: ${info.persona.length}");
+    if ( info.persona.length > 0 ) {
       info.documentoBuscado = bloc.cedula;
       info.fromView = 'BUSCARPERSONA';
-      Navigator.pushNamed(context, 'viviendapersona', arguments: info);
+      parametros.info=info;
+      //Navigator.pushNamed(context, 'viviendapersona', arguments: info);
+      Navigator.pushNamed(context, 'pacienteBuscarAgregar2', arguments: parametros);
     } else {
       mostrarAlerta( context, 'No existe el documento buscado' );
     }
@@ -190,7 +191,7 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
 
     AppAlertDialog.error(
       context: context,
-      tittle: 'Tesãira',
+      tittle: 'Tesãira 3',
       desc: mensaje,
       btnCancelOnPress: () => print('Modal cerrado')
     );

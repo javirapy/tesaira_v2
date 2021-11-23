@@ -3,32 +3,34 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/providers/visita_provider.dart';
-import 'package:formvalidation/src/search/search_persona_agregar_delegate.dart';
 import 'package:formvalidation/src/widgets/app_alertdialog.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 
 //en esta pagina se carga la ci de la persona al cual se quiere visitar
-class BuscarPersonaPage extends StatefulWidget {
+class BuscarAgregarPersonaPage extends StatefulWidget {
   
   @override
-  _BuscarPersonaPageState createState() => _BuscarPersonaPageState();
+  _BuscarAgregarPersonaPageState createState() => _BuscarAgregarPersonaPageState();
 }
 
-class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
+class _BuscarAgregarPersonaPageState extends State<BuscarAgregarPersonaPage> {
   
   final visitaProvider = new VisitaProvider();
   bool _wating = false;
+    String viviendaId;
   
   @override
   Widget build(BuildContext context) {
+    viviendaId = ModalRoute.of(context).settings.arguments;
+print(viviendaId);
     final spinner = SpinKitWave(
         color: Colors.green,
         size: 50.0,
     );
 
     return Scaffold(
-      appBar: _crearAppBar(),
+      appBar: _crearAppBar(context),
       body: ModalProgressHUD(
         inAsyncCall: _wating,
         opacity: 0.5,
@@ -38,35 +40,17 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
     );
   }
 
-///SE QUITA PARA AGREGAR BUSQUEDA DINAMICA
-  // Widget _crearAppBar(context){
-  //   return AppBar(
-  //       title: Text('Ingrese cedula', style: TextStyle(color: Colors.white),),
-  //       centerTitle: true,
-  //     );
-  // }
-
-  
-    Widget _crearAppBar(){
+  Widget _crearAppBar(context){
     return AppBar(
-          
-          title: Text('Buscar Personas...'),
-          centerTitle: false,
-          backgroundColor: Colors.green,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: (){
-                showSearch(
-                  context: context,
-                  delegate: DataPersonaAgregarSearch(),
-                  //query: 'Hola'
-                  );
-              },
-            )
+        title: Text('Ingrese cedula a buscar', style: TextStyle(color: Colors.white),),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
 
-
-          ],
+            Navigator.pushReplacementNamed(context, 'pacientePrinc', arguments: viviendaId);
+          } 
+        ),
       );
   }
 
@@ -100,7 +84,7 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
             ),
             child: Column(
               children: <Widget>[
-                Text('Buscar Paciente Vivienda', style: TextStyle(fontSize: 20.0)),
+                Text('Buscar Paciente a Agregar', style: TextStyle(fontSize: 20.0)),
                 SizedBox( height: 60.0 ),
                 _crearCedula(bloc),
                 SizedBox( height: 30.0 ),
@@ -122,7 +106,7 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: TextField(
               decoration: InputDecoration(
-                labelText: 'Cedula',
+                labelText: 'Ingrese Nro. Cedula a Buscar',
                 errorText: snapshot.error
               ),
               onChanged: bloc.changeCedula,
@@ -157,15 +141,17 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
       _wating = true;
     });
     await bloc.eliminarTodo();
-    DatosViviendaModel info = await visitaProvider.buscarPaciente(bloc.cedula);
+    Persona2Model info = await visitaProvider.buscarPaciente2(bloc.cedula);
     setState(() {
       _wating = false;
     });
-
-    if ( info != null ) {
+print("Info: ${info.persona.length}");
+    if ( info.persona.length > 0 ) {
       info.documentoBuscado = bloc.cedula;
       info.fromView = 'BUSCARPERSONA';
-      Navigator.pushNamed(context, 'viviendapersona', arguments: info);
+      info.viviendaId=viviendaId;
+      //Navigator.pushNamed(context, 'viviendapersona', arguments: info);
+      Navigator.pushNamed(context, 'pacienteBuscarAgregar', arguments: info);
     } else {
       mostrarAlerta( context, 'No existe el documento buscado' );
     }
@@ -190,7 +176,7 @@ class _BuscarPersonaPageState extends State<BuscarPersonaPage> {
 
     AppAlertDialog.error(
       context: context,
-      tittle: 'Tesãira',
+      tittle: 'Tesãira2',
       desc: mensaje,
       btnCancelOnPress: () => print('Modal cerrado')
     );

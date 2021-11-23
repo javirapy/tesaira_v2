@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/preferencias_usuario/preferencias_usuario.dart';
 
 import 'dart:math';
@@ -64,10 +65,10 @@ class BotonesPage extends StatelessWidget {
         ]    
       ), 
       body: FutureBuilder(
-            future: provider.getBuzEntrada(),
-            builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+            future: provider.getContadorNotificacion(),
+            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               if(snapshot.hasData){
-                cantidad = snapshot.data.length;
+                cantidad = snapshot.data;
               }
 
               return Stack(
@@ -92,10 +93,20 @@ class BotonesPage extends StatelessWidget {
 
   void choiceAction(String choice, BuildContext context){
     if(choice == ConstPopUp.salir){
+
+      final bloc = LocalProvider.of(context);
+     bloc.changeEmail("");
+
       //elimino el token que habia usado para loguearme
-      _prefs.token = null;
-      Navigator.pushNamed(context, 'login');
+      final _prefs = new PreferenciasUsuario();
+      print( _prefs.token.toString());
+      _prefs.token="null";
+      _prefs.infoUser ="";
+      print( _prefs.token.toString());
+     // Navigator.pushNamed(context, 'login');
+     Navigator.pushReplacementNamed(context, 'login');
     }
+     
   }
 
 
@@ -179,6 +190,14 @@ class BotonesPage extends StatelessWidget {
           children: [
             _crearBotonRedondeado( Colors.pinkAccent, Icons.home, 'Datos Censo' , 'botonescenso', context),
             _crearBotonRedondeado( Colors.blue, Icons.notifications, 'Notificaciones' , 'dashnoti', context, cantidad),
+          ]
+        ),
+        TableRow(
+          children: [
+            _crearBotonRedondeado( Colors.pink, Icons.sync_problem, 'Sincronizar Visitas' , 'sincronizar', context),
+            // SizedBox(width: 50,)
+           _crearBotonRedondeado( Colors.green, Icons.sync, 'Visitas Sincronizadas' , 'sincronizados', context),
+
           ]
         )
       ],
@@ -266,8 +285,10 @@ class ConstPopUp {
   List<String> listaPop = new List();
   
   List<String> retrieveListaPop(){
+    listaPop.add("Version: 2.0");
     listaPop.add(_prefs.infoUser);
     listaPop.add(salir);
+    
     return listaPop;
   }
   
