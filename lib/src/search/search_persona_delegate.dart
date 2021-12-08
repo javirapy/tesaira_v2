@@ -3,6 +3,7 @@ import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/providers/visita_provider.dart';
 import 'package:formvalidation/src/utils/utils.dart';
+import 'package:formvalidation/src/widgets/loader.dart';
 
 class DataPersonaSearch extends SearchDelegate {
   Map<String, dynamic> seleccion;
@@ -145,6 +146,7 @@ class DataPersonaSearch extends SearchDelegate {
     if ( info != null ) {
       info.documentoBuscado = cedula;
       info.fromView = 'NUEVAVISITA';
+
      Navigator.pushNamed(context, 'vivienda', arguments: info);
      //      Navigator.pushNamed(context, 'viviendapersona', arguments: info);
 

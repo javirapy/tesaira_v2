@@ -22,7 +22,8 @@ Future<List<InsertVisita>> fetchEmployeesFromDatabase(VisitaBloc bloc) async {
 
 class SincronizadosVisitaPage extends StatefulWidget {
   @override
-  _SincronizadosVisitaPageState createState() => _SincronizadosVisitaPageState();
+  _SincronizadosVisitaPageState createState() =>
+      _SincronizadosVisitaPageState();
 }
 
 class _SincronizadosVisitaPageState extends State<SincronizadosVisitaPage> {
@@ -46,107 +47,53 @@ class _SincronizadosVisitaPageState extends State<SincronizadosVisitaPage> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     return new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              height: 90.0,
-                              margin: EdgeInsets.all(5.0),
-                              decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 3.0,
-                                    offset: Offset(0.0, 5.0),
-                                    spreadRadius: 3.0)
-                              ], borderRadius: BorderRadius.circular(10.0)),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  IconButton(
-                                      icon: Icon(Icons.check,color: Colors.green, size: 50.0),
-                                      onPressed: () {
-                                        // sincronizar(bloc, context, snapshot.data[index].id);
-                                      }),
-                                      SizedBox(
-                                    width: 15,
-                                  ),
-                                  
-                                  // Text(
-                                  //     "Visita: " +
-                                  //         snapshot.data[index].id.toString(),
-                                  //     style: new TextStyle(
-                                  //         fontWeight: FontWeight.bold,
-                                  //         fontSize: 18.0)),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                    height: 15,
-                                  ),
-                                    Text(
-                                      "Vivienda Id: " +
-                                          snapshot.data[index].viviendaId
-                                              .toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0)),
-
-                                          Text(
-                                      "Fecha: " +
-                                          snapshot.data[index].fechaVisita
-                                              .toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0)),
-
-                                          Text(
-                                      "Paciente: " +
-                                          snapshot.data[index].documentoBuscado
-                                              .toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0)),
-                                          Text(
-                                          snapshot.data[index].nombre + ' ' + snapshot.data[index].apellido
-                                              .toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0)),
-                                    ],
-                                  ),
-                                  
-                                  // SizedBox(
-                                  //   width: 15,
-                                  // ),
-                                  
-                                  // new Divider(),
-                                  // IconButton(
-                                  //     icon: Icon(Icons.check,color: Colors.green, size: 50.0),
-                                  //     onPressed: () {
-                                  //       // sincronizar(bloc, context, snapshot.data[index].id);
-                                  //     })
-                                ],
-                              ))
-                        ]);
+                      children: <Widget>[
+                        ListTile(
+                        //  onTap: () => mostrarDetalle(data['id']),
+                          leading: Icon(Icons.check, color: Colors.green),
+                          title: Text(
+                            'Id: ' + snapshot.data[index].viviendaId.toString() +' - Fecha: '+
+                            snapshot.data[index].fechaVisita.toString(),
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text('Paciente: ' +
+                            snapshot.data[index].documentoBuscado +' ' + snapshot.data[index].nombre+' '+ snapshot.data[index].apellido
+                            ),
+                          // trailing: Row(
+                          //   mainAxisSize: MainAxisSize.min,
+                          //   children: <Widget>[
+                          //     // _builCarita(persona),
+                          //     GestureDetector(
+                          //       child: Icon(Icons.arrow_forward,
+                          //           color: Colors.green),
+                          //     ),
+                          //   ],
+                          // ),
+                        ),
+                        Divider(
+                          height: 1,
+                          color: Colors.green,
+                        )
+                      ],
+                    );
+                    ;
                   });
-            } else if ( snapshot.data == null) {
+            } else if (snapshot.data == null) {
               return Container(
-                              width: 600.0,
-                              margin: EdgeInsets.all(60),
-                              decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 3.0,
-                                    offset: Offset(0.0, 5.0),
-                                    spreadRadius: 3.0)
-                              ], borderRadius: BorderRadius.circular(10.0)),
-                              child: Text("No hay datoa sinxronizados!!", style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0)));
-            
+                  width: 600.0,
+                  margin: EdgeInsets.all(60),
+                  decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 3.0,
+                        offset: Offset(0.0, 5.0),
+                        spreadRadius: 3.0)
+                  ], borderRadius: BorderRadius.circular(10.0)),
+                  child: Text("No hay datos sinxronizados!!",
+                      style: new TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18.0)));
             } else if (snapshot.hasError) {
               return new Text("${snapshot.error}");
             }
@@ -160,7 +107,7 @@ class _SincronizadosVisitaPageState extends State<SincronizadosVisitaPage> {
     );
   }
 
-  sincronizar(VisitaBloc bloc, context, idVisita) async{
+  sincronizar(VisitaBloc bloc, context, idVisita) async {
     InsertVisita sendData = new InsertVisita();
     // await obtenerUbicacion();
     // sendData.lat = latitud;
@@ -168,58 +115,49 @@ class _SincronizadosVisitaPageState extends State<SincronizadosVisitaPage> {
     // sendData.viviendaId = datosVivienda.vivienda.id;
     // sendData.detallesVisitas = await bloc.obtenerDetallesVisita();
     final visitaProvider = new VisitaProvider();
-    String mensaje='ok';
-   
+    String mensaje = 'ok';
 
-    InsertVisita sendDataLocal = new InsertVisita(); 
-    sendDataLocal = await bloc.getDatosVisitasLocal( idVisita );
+    InsertVisita sendDataLocal = new InsertVisita();
+    sendDataLocal = await bloc.getDatosVisitasLocal(idVisita);
 
-
-
- 
-
-     try { 
-      final result = await InternetAddress.lookup('google.com'); 
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) 
-    { print('connected'); } 
-    } 
-    on SocketException catch (_) { print('not connected'); 
-    mensaje='nok';
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      mensaje = 'nok';
     }
 
-if(mensaje == 'ok'){
-     mensaje = await visitaProvider.crearVisita(sendDataLocal);
-     print('Enviado para sincronizar ${sendDataLocal.toJson()}');
+    if (mensaje == 'ok') {
+      mensaje = await visitaProvider.crearVisita(sendDataLocal);
+      print('Enviado para sincronizar ${sendDataLocal.toJson()}');
 
-     bloc.updateSincronizado(idVisita);
-}
-    
+      bloc.updateSincronizado(idVisita);
+    }
 
-    if(mensaje == 'ok'){
+    if (mensaje == 'ok') {
       showMessageSuccess(context, 'Visita sincronizada!!');
-    }else{
+    } else {
       showMessageSuccess(context, 'Volver a probar no se pudo sincronizar');
-
     }
-    
   }
 
-   void showMessageSuccess(BuildContext context, String mensaje ) {
+  void showMessageSuccess(BuildContext context, String mensaje) {
     AppAlertDialog.success(
-      context: context,
-      tittle: 'Tesãira', 
-      desc: mensaje, 
-      btnOkOnPress: () => Navigator.pushReplacementNamed(context, 'sincronizar')
-    );
+        context: context,
+        tittle: 'Tesãira',
+        desc: mensaje,
+        btnOkOnPress: () =>
+            Navigator.pushReplacementNamed(context, 'sincronizar'));
   }
 
-  void mostrarAlerta(BuildContext context, String mensaje ) {
+  void mostrarAlerta(BuildContext context, String mensaje) {
     AppAlertDialog.error(
-      context: context,
-      tittle: 'Tesãira',
-      desc: mensaje,
-      btnCancelOnPress: () => print('Modal cerrado')
-    );
+        context: context,
+        tittle: 'Tesãira',
+        desc: mensaje,
+        btnCancelOnPress: () => print('Modal cerrado'));
   }
-  
 }

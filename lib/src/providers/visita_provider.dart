@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:formvalidation/src/models/datos_censo.dart';
+import 'package:formvalidation/src/models/datos_visita.dart';
 import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/models/insert_visita_model.dart';
 import 'package:formvalidation/src/preferencias_usuario/preferencias_usuario.dart';
@@ -434,4 +435,68 @@ class VisitaProvider {
     }
 
   }
+
+
+
+  Future<List<Map<String, dynamic>>> obtenerVisitas( InsertVisita data) async {
+
+ List<Map<String, dynamic>> decodedData = [];
+    List<Object> dataraw;
+
+ final authData = {
+       'fini'    : data.fini,
+      'ffin' : data.ffin
+    };
+    print(authData.toString());
+    Map<String, String> headers = {"Authorization": "Bearer ${_prefs.token}", "Content-Type": "application/json"};
+
+    final resp = await http.post(
+//      'http://192.168.0.100:9080/api/login.json',
+        'https://www.tesairauc.com/api/listarVisitas',
+      body: json.encode( authData ),
+      headers: headers
+    );
+
+    print(resp.toString());
+    try{
+      dataraw = json.decode(resp.body);
+      
+      for (var item in dataraw) {
+        decodedData.add(item);
+      }
+      
+    }catch(e){ 
+      print('Error al convertir datos obtener visitas lista $e');
+    }
+    
+    return decodedData;    
+  }
+
+
+    Future<DatosVisita> detalleVisita( int idVisita) async {
+    Map<String, String> headers = {"Authorization": "Bearer ${_prefs.token}", "Content-Type": "application/json"};
+    final resp = await http.get(
+      'https://www.tesairauc.com/api/detallevisita/${idVisita}',
+      headers: headers
+    );
+          print(resp.body[0].toString());
+
+    List<dynamic> decodedData;
+    DatosVisita decodedResp;
+    try {
+      decodedData = json.decode(resp.body);
+      decodedResp = DatosVisita.fromJson(decodedData[0]);
+    } catch (e) {
+      print('No existe hina el documento buscado');
+    }
+    
+    if ( decodedResp != null ) {
+      return decodedResp;
+    } else {
+      return null;
+    }
+
+  }
+
+
 }

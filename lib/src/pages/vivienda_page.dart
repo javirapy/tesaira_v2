@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
 import 'package:formvalidation/src/models/datos_vivienda_model.dart';
 import 'package:formvalidation/src/models/insert_visita_model.dart';
 import 'package:formvalidation/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:formvalidation/src/providers/visita_provider.dart';
 import 'package:formvalidation/src/widgets/app_alertdialog.dart';
+import 'package:formvalidation/src/widgets/loader.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 //import 'package:geolocator/geolocator.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:geolocator/geolocator.dart';
@@ -31,9 +34,13 @@ class _ViviendaPageState extends State<ViviendaPage> {
 
   Future<void> _launched;
 
+    bool _wating = true;
+
+
   @override
   Widget build(BuildContext context) {
     datosVivienda = ModalRoute.of(context).settings.arguments;
+
 
     bloc = LocalProvider.visitaBloc(context);
     if ('NUEVAVISITA' == datosVivienda.fromView) {
@@ -47,12 +54,12 @@ class _ViviendaPageState extends State<ViviendaPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: _crearAppBar(context, datosVivienda.fromView),
-        body: Column(
+        body:  Column(
           children: <Widget>[
             //  _mostrarMapa(),
             _crearCabecera3(datosVivienda.vivienda),
             Divider(
-              height: 0.5,
+              height: 0.2,
               color: Colors.green,
               indent: 10,
             ),
@@ -64,7 +71,10 @@ class _ViviendaPageState extends State<ViviendaPage> {
             )*/
           ],
         ),
-      ),
+     
+        ),
+        
+        
     );
   }
 
@@ -213,12 +223,19 @@ class _ViviendaPageState extends State<ViviendaPage> {
   }
 
   Widget _personaTarjeta(PersonaModel persona, context, bool pintar) {
+
+    
+
     return Container(
         //elevation: 1,
         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         color: pintar ? Color.fromRGBO(0, 204, 102, 0.1) : Colors.white,
         child: //Column(
             //children: <Widget>[
+
+        SingleChildScrollView(
+          
+          child:
             ListTile(
           title: Text(
             persona.documento,
@@ -239,10 +256,12 @@ class _ViviendaPageState extends State<ViviendaPage> {
               ),
             ],
           ),
-        )
+        ),),
         //],
         //),
         );
+
+        
   }
 
   _launchInBrowser(url) async {
@@ -434,7 +453,10 @@ class _ViviendaPageState extends State<ViviendaPage> {
         child: ListView(
           children: personas,
         ));
+        
   }
+
+  
 
   // Widget _mostrarMapa() {
   //   return  MapboxMap(

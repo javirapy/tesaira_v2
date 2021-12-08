@@ -1,15 +1,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:formvalidation/src/bloc/provider.dart';
+import 'package:formvalidation/src/models/insert_visita_model.dart';
 import 'package:formvalidation/src/pages/botones_censo_page.dart';
 import 'package:formvalidation/src/pages/botones_page.dart';
+import 'package:formvalidation/src/pages/botones_visita_page.dart';
 import 'package:formvalidation/src/pages/buscar_agregar_persona_2_page.dart';
 import 'package:formvalidation/src/pages/buscar_agregar_persona_page.dart';
 import 'package:formvalidation/src/pages/buscar_persona_page.dart';
 import 'package:formvalidation/src/pages/dash_noti_page.dart';
+import 'package:formvalidation/src/pages/det_visita.dart';
+import 'package:formvalidation/src/pages/det_visita_procedimiento.dart';
 import 'package:formvalidation/src/pages/detalle_salida_page.dart';
 import 'package:formvalidation/src/pages/home_page.dart';
 import 'package:formvalidation/src/pages/home_tab_page.dart';
+import 'package:formvalidation/src/pages/lista_visitas_page.dart';
 import 'package:formvalidation/src/pages/login_page.dart';
 import 'package:formvalidation/src/pages/notifcacion_page.dart';
 import 'package:formvalidation/src/pages/paciente_buscar_agregar_2_page.dart';
@@ -23,6 +28,7 @@ import 'package:formvalidation/src/pages/search_page.dart';
 import 'package:formvalidation/src/pages/search_persona_page.dart';
 import 'package:formvalidation/src/pages/sincronizados_visita_page.dart';
 import 'package:formvalidation/src/pages/sincronizar_visita_page.dart';
+import 'package:formvalidation/src/pages/visitas_por_fecha_page.dart';
 import 'package:formvalidation/src/pages/vivienda_page.dart';
 import 'package:formvalidation/src/pages/vivienda_persona_page.dart';
 import 'package:formvalidation/src/preferencias_usuario/preferencias_usuario.dart';
@@ -52,7 +58,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Tesaira',
         //home: MyHomePage(title: '',),
-        initialRoute: 'login',
+        initialRoute: 'botones',
         routes: {     
           'login'         : ( BuildContext context ) => LoginPage(),//
           'botones'       : ( BuildContext context ) => BotonesPage(),
@@ -82,6 +88,11 @@ class MyApp extends StatelessWidget {
           'sincronizar':( BuildContext context ) => SincronizarVisitaPage(), //
           'buscarPersona':( BuildContext context ) => SearchPersonaPage(), //
           'sincronizados':( BuildContext context ) => SincronizadosVisitaPage(), //
+'visitasFecha':( BuildContext context ) => VisitasPorFechaPage(), //
+'listaVisitas':( BuildContext context ) => ListaVisitasPage(), //
+'detVisita':( BuildContext context ) => DetalleVisitaPage(), //
+'detVisitaProcedimiento':( BuildContext context ) => DetalleVisitaProcedimientoPage(), //
+          'botonesVisitas'  : ( BuildContext context ) => BotonesVisitaPage(),//
 
          // ListaSincronizarPage
         },

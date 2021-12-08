@@ -23,7 +23,10 @@ class InsertVisita {
   String apellido;
   List<DetallesVisitas> detallesVisitas;
 
-  InsertVisita({this.id,this.viviendaId, this.lat, this.lon, this.fechaVisita, this.documentoBuscado,this.nombre,this.apellido,this.detallesVisitas});
+  String fini;
+  String ffin;
+
+  InsertVisita({this.id,this.viviendaId, this.lat, this.lon, this.fechaVisita, this.documentoBuscado,this.nombre,this.apellido,this.detallesVisitas, this.fini, this.ffin});
 
   InsertVisita.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -34,6 +37,8 @@ class InsertVisita {
     documentoBuscado = json['documento_buscado'];
     nombre = json['nombre'];
     apellido = json['apellido'];
+    fini = json['fini'];
+    ffin = json['ffin'];
     if (json['detalles_visitas'] != null) {
       detallesVisitas = new List<DetallesVisitas>();
       json['detalles_visitas'].forEach((v) {
@@ -52,6 +57,8 @@ class InsertVisita {
     data['documento_buscado'] = this.documentoBuscado;
     data['nombre'] = this.nombre;
     data['apellido'] = this.apellido;
+    data['fini'] = this.fini;
+    data['ffin'] = this.ffin;
     if (this.detallesVisitas != null) {
       data['detalles_visitas'] = this.detallesVisitas.map((v) => v.toJson()).toList();
     }

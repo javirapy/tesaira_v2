@@ -46,82 +46,37 @@ class _SincronizarVisitaPageState extends State<SincronizarVisitaPage> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     return new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              height: 90.0,
-                              margin: EdgeInsets.all(5.0),
-                              decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 3.0,
-                                    offset: Offset(0.0, 5.0),
-                                    spreadRadius: 3.0)
-                              ], borderRadius: BorderRadius.circular(10.0)),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Text(
-                                      "Visita: " +
-                                          snapshot.data[index].id.toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0)),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                    height: 15,
-                                  ),
-                                    Text(
-                                      "Vivienda Id: " +
-                                          snapshot.data[index].viviendaId
-                                              .toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0)),
-
-                                          Text(
-                                      "Fecha: " +
-                                          snapshot.data[index].fechaVisita
-                                              .toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0)),
-
-                                          Text(
-                                      "Paciente: " +
-                                          snapshot.data[index].documentoBuscado
-                                              .toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0)),
-                                          Text(
-                                          snapshot.data[index].nombre + ' ' + snapshot.data[index].apellido
-                                              .toString(),
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0)),
-                                    ],
-                                  ),
-                                  
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  
-                                  new Divider(),
-                                  IconButton(
-                                      icon: Icon(Icons.sync_rounded,color: Colors.green, size: 50.0),
-                                      onPressed: () {
-                                        sincronizar(bloc, context, snapshot.data[index].id);
-                                      })
-                                ],
-                              ))
-                        ]);
+                      children: <Widget>[
+                        ListTile(
+                          onTap: () => sincronizar(bloc, context, snapshot.data[index].id),
+                          leading: Icon(Icons.sync, color: Colors.green),
+                          title: Text(
+                            'Id: ' + snapshot.data[index].viviendaId.toString() +' - Fecha: '+
+                            snapshot.data[index].fechaVisita.toString(),
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text('Paciente: ' +
+                            snapshot.data[index].documentoBuscado +' ' + snapshot.data[index].nombre+' '+ snapshot.data[index].apellido
+                            ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              // _builCarita(persona),
+                              GestureDetector(
+                                child: Icon(Icons.arrow_forward,
+                                    color: Colors.green),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          height: 1,
+                          color: Colors.green,
+                        )
+                      ],
+                    );
                   });
             } else if ( snapshot.data == null) {
               return Container(

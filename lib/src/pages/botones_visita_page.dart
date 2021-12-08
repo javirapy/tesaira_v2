@@ -1,84 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:formvalidation/src/bloc/provider.dart';
-import 'package:formvalidation/src/models/insert_visita_model.dart';
-import 'package:formvalidation/src/preferencias_usuario/preferencias_usuario.dart';
 
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:formvalidation/src/providers/visita_provider.dart';
 
-Future<List<InsertVisita>> fetchEmployeesFromDatabase(VisitaBloc bloc) async {
-  print(bloc.getListDatosVisitasLocal('N'));
-
-  List<InsertVisita> todo = new List();
-
-  todo = await bloc.getListDatosVisitasLocal('N');
-  return todo;
-}
 
 
-class BotonesPage extends StatelessWidget {
+class BotonesVisitaPage extends StatelessWidget {
   final VisitaProvider provider = new VisitaProvider();
   int cantidad = 0;
-  final _prefs = new PreferenciasUsuario();
-    VisitaBloc bloc1;
-
+  
 
   @override
   Widget build(BuildContext context) {
-
-    final estiloNegrita = TextStyle(color: Colors.green, fontWeight: FontWeight.w600);
-    final estiloNormal = TextStyle(fontWeight: FontWeight.normal );
-
+  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Menú principal', style: TextStyle(color: Colors.white),),
+        title: Text('Gestion Visitas', style: TextStyle(color: Colors.white),),
         centerTitle: true,
-        leading: Container(),
-        actions: <Widget>[
-          PopupMenuButton(
-            onSelected: (choice) => choiceAction(choice, context),
-            icon: Icon(Icons.perm_identity),
-            itemBuilder: (BuildContext context){
-              return ConstPopUp().retrieveListaPop().map((String choice){
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice, style: ConstPopUp.salir != choice ? estiloNormal : estiloNegrita,),
-                  );
-              }).toList();
-            }      
-         )
-          
-          /*IconButton(
-              icon: Icon(Icons.search),
-              onPressed: (){
-             
-              },
-            )*/
-
-
-          /*CircleAvatar(
-            backgroundImage: Icons.perm_identity,
-            child: PopupMenuButton(
-              itemBuilder: (BuildContext context){
-                return ConstPopUp().retrieveListaPop().map((String choice){
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              }
-            ),
-          )*/
-        ]    
+        
       ), 
       body: FutureBuilder(
-            future: provider.getContadorNotificacion(),
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            future: provider.getBuzEntrada(),
+            builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
               if(snapshot.hasData){
-                cantidad = snapshot.data;
+                cantidad = snapshot.data.length;
               }
 
               return Stack(
@@ -101,30 +49,8 @@ class BotonesPage extends StatelessWidget {
     );
   }
 
-  void choiceAction(String choice, BuildContext context){
-    if(choice == ConstPopUp.salir){
-
-      final bloc = LocalProvider.of(context);
-     bloc.changeEmail("");
-
-      //elimino el token que habia usado para loguearme
-      final _prefs = new PreferenciasUsuario();
-      print( _prefs.token.toString());
-      _prefs.token="null";
-      _prefs.infoUser ="";
-      print( _prefs.token.toString());
-     // Navigator.pushNamed(context, 'login');
-     Navigator.pushReplacementNamed(context, 'login');
-    }
-     
-  }
-
 
   Widget _fondoApp(){
-
-    //   Future<List< InsertVisita>> cantidad = fetchEmployeesFromDatabase(bloc1);
-
-      
 
     final gradiente = Container(
       width: double.infinity,
@@ -165,7 +91,7 @@ class BotonesPage extends StatelessWidget {
       children: <Widget>[
         gradiente,
         Positioned(
-          top: -100.0,
+          top: 350.0,
           child: cajaVerde
         )
       ],
@@ -196,25 +122,10 @@ class BotonesPage extends StatelessWidget {
       children: [
         TableRow(
           children: [
-         //   _crearBotonRedondeado( Colors.orange, Icons.group_add, 'Nueva Visita' , 'nuevaVisita', context),
-            _crearBotonRedondeado( Colors.orange, Icons.people, 'Visitas' , 'botonesVisitas', context),
-            _crearBotonRedondeado( Colors.purpleAccent, Icons.multiline_chart, 'Mi productividad' , 'productividad', context),
+            _crearBotonRedondeado( Colors.amberAccent, Icons.group_add, 'Nueva Visita' , 'nuevaVisita', context),
+            _crearBotonRedondeado( Colors.blue, Icons.people, 'Consulta de Visitas' , 'visitasFecha', context),
           ]
         ),
-        TableRow(
-          children: [
-            _crearBotonRedondeado( Colors.pinkAccent, Icons.home, 'Datos Censo' , 'botonescenso', context),
-            _crearBotonRedondeado( Colors.blue, Icons.notifications, 'Notificaciones' , 'dashnoti', context, cantidad),
-          ]
-        ),
-        TableRow(
-          children: [
-            _crearBotonRedondeado( Colors.pink, Icons.sync_problem, 'Sincronizar Visitas' , 'sincronizar', context),
-            // SizedBox(width: 50,)
-           _crearBotonRedondeado( Colors.green, Icons.sync, 'Visitas Sincronizadas' , 'sincronizados', context),
-
-          ]
-        )
       ],
     );
 
@@ -274,10 +185,10 @@ class BotonesPage extends StatelessWidget {
                       CircleAvatar(
                         backgroundColor: color,
                         radius: 35.0,
-                        child: cantidad != null ? botonEnumerado(cantidad) : Icon( icono, color: Colors.white, size: 30.0 ),
+                        child:  Icon( icono, color: Colors.white, size: 30.0 ),
                       ),
-                      Text( texto , style: TextStyle( color: color ,fontWeight: FontWeight.bold)),
-                      SizedBox( height: 5.0 )
+                      Text( texto , style: TextStyle( color: color ,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                      SizedBox( height: 5.0 ),
                     ],
                   ),
   
@@ -287,26 +198,5 @@ class BotonesPage extends StatelessWidget {
     );
   }
 
-
-}
-
-class ConstPopUp {
-  static const String salir = 'Cerrar sesión';
-  String userInfo;
-
-  final _prefs = new PreferenciasUsuario();
-
-
-  List<String> listaPop = new List();
-  
-  List<String> retrieveListaPop(){
-    listaPop.add("Version: 2.0");
-    listaPop.add(_prefs.infoUser);
-    listaPop.add(salir);
-    
-    return listaPop;
-  }
-  
-  
 
 }
